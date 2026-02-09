@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>　にゃ～ Weather 🐾</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), 
+                      url('backgr.png'); 
+    
+    background-size: cover;      
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    overflow: hidden; /* Ngăn hiện thanh cuộn xấu xí */
+  
+}
+
+/* Thêm hiệu ứng cho cái bảng trắng nổi bật hơn trên nền ảnh */
+.backdrop-blur-md {
+    background-color: rgba(255, 255, 255, 0.6) !important; /* Trong suốt hơn tí cho nghệ */
+}
+        .btn-start {
+            background: #ff8a80;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-start:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(255, 82, 82, 0.3);
+        }
+        select:focus { outline: none; border-color: #ff8a80; }
+        /* chuyển động nhấp nháy */
+@keyframes glow-pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 126, 126, 0.5), 0 0 10px rgba(255, 126, 126, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 126, 126, 0.8), 0 0 30px rgba(255, 126, 126, 0.6);
+        transform: scale(1.05);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255, 126, 126, 0.5), 0 0 10px rgba(255, 126, 126, 0.3);
+        transform: scale(1);
+    }
+}
+.btn-start-glow {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); 
+    animation: glow-pulse 2s infinite ease-in-out; 
+    transition: all 0.3s ease;
+}
+
+.btn-start-glow:hover {
+    animation: none; 
+    box-shadow: 0 0 30px rgba(255, 126, 126, 1);
+    transform: scale(1.1);
+}
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0); /* Điểm xuất phát */
+    }
+    50% { 
+        transform: translateY(-150px); /* Bay vút lên cao 150px */
+    }
+}
+
+.animate-float {
+    /* Cho chạy nhanh hơn (giảm từ 6s xuống 3s) */
+    animation: float 3s infinite ease-in-out; 
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+}
+
+    </style>
+</head>
+<body>
+    <div id="bg-icons-container" class="fixed inset-0 pointer-events-none overflow-hidden -z-10"></div>
+
+    <div class="text-center p-8 bg-white/70 backdrop-blur-md rounded-[3rem] shadow-2xl border-4 border-white max-w-sm mx-4">
+    <div class=" https://lottie.host/3e90e273-e1eb-4873-b283-3fb517ea9440/ina5AHtn31.lottie"></div>
+    
+    <h1 class="text-3xl font-extrabold text-pink-600 mb-2">にゃ～ Weather!</h1>
+    <p class="text-gray-600 mb-8 font-medium">ミスなしで出かけましょう</p>
+    
+    <button class="btn-start-glow px-10 py-4 text-white font-bold rounded-full text-xl shadow-lg">
+    始める
+</button>
+</div>
+
+</body>
+<script>
+    const icons = ['☁️', '☀️', '🌸', '🐾', '⭐', '💧'];
+const container = document.getElementById('bg-icons-container');
+
+function createFloatingIcons() {
+    for (let i = 0; i < 20; i++) { // Tăng lên 20 icon cho náo nhiệt
+        const span = document.createElement('span');
+        span.innerText = icons[Math.floor(Math.random() * icons.length)];
+        
+        // Tăng opacity lên 0.6 để nhìn rõ hơn trên nền ảnh
+        span.className = 'absolute text-4xl opacity-60 select-none animate-float';
+        
+        span.style.left = Math.random() * 100 + 'vw';
+        span.style.top = Math.random() * 100 + 'vh';
+        
+        // Tăng kích thước ngẫu nhiên từ 30px đến 55px
+        span.style.fontSize = (Math.random() * 25 + 30) + 'px';
+        
+        // Độ trễ ngẫu nhiên để không bị bay cùng lúc nhìn chán lắm
+        span.style.animationDelay = (Math.random() * 5) + 's';
+        
+        // Tốc độ bay nhanh: chỉ từ 2s đến 4s cho một vòng lên xuống
+        span.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+        container.appendChild(span);
+    }
+}
+
+createFloatingIcons();
+    // sound
+    const meowUrl = 'https://www.myinstants.com/media/sounds/scratch-cat-meow.mp3';
+    const meowAudio = new Audio(meowUrl);
+    meowAudio.volume = 0.5;
+
+    // button logic
+    const btn = document.querySelector('.btn-start-glow');
+    
+    if (btn) {
+        // di chuot vao  (Hover)
+        btn.addEventListener('mouseenter', () => {
+            meowAudio.currentTime = 0;
+            meowAudio.play().catch(e => console.log("Cần click trước khi tự phát nhạc!"));
+        });
+
+        // nhan (Click)
+        btn.addEventListener('click', (e) => {
+            meowAudio.currentTime = 0;
+            meowAudio.play();
+
+            // nut nhe 
+            btn.style.transform = "scale(0.95)";
+
+            //doi 4s
+            setTimeout(() => {
+                window.location.href = 'app.html'; 
+            }, 400);
+        });
+    }
+</script>
+</html>

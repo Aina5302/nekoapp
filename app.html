@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather & Outfit Advice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="p-4 md:p-10 min-h-screen flex items-center justify-center">
+
+    <div id="app" class="main-card p-6 md:p-10 rounded-3xl w-full max-w-6xl shadow-2xl">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 themed-text">今日の天気予報と服装アドバイス</h1>
+
+       <div class="flex flex-col lg:flex-row-reverse gap-8">
+            <div class="lg:w-3/5 flex flex-col space-y-6">
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 order-4">
+                    <div>
+                        <label for="modelSelect" class="input-label">Select Model</label>
+                        <select id="modelSelect" class="input-field">
+                            <option value="model1">雪ちゃん </option>
+                            <option value="model2">ピングちゃん </option>
+                            <option value="model3">秋ちゃん </option>
+                            <option value="model4">夏ちゃん </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">寒さの耐性 </label>
+                        <select id="coldSensitivity" class="input-field">
+                            <option value="medium">普通</option>
+                            <option value="low">弱い </option>
+                            <option value="high">強い </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">暑さの耐性 </label>
+                        <select id="heatSensitivity" class="input-field">
+                            <option value="medium">普通</option>
+                            <option value="low">弱い </option>
+                            <option value="high">強い </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">スカート／パンツ丈</label>
+                        <select id="skirtLength" class="input-field">
+                            <option value="no-skirt">スカートなし</option>
+                            <option value="mini">ミニ </option>
+                            <option value="knee">膝丈 </option>
+                            <option value="maxi">ロング </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">屋外滞在時間</label>
+                        <select id="outdoorDuration" class="input-field">
+                            <option value="short">短い (&lt; 1h)</option>
+                            <option value="medium">中くらい (1-3h)</option>
+                            <option value="long">長い (&gt; 3h)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">体調・気分 </label>
+                        <select id="healthStatus" class="input-field">
+                            <option value="good">元気いっぱい！</option>
+                            <option value="tired">ちょっとお疲れ</option>
+                            <option value="period">女の子の日 🩸</option>
+                            <option value="cold_suspect">風邪気味かも</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-end gap-3 glass-panel p-4 rounded-2xl bg-white/30 order-3">
+                    <div class="flex-grow">
+                        <label class="input-label !mb-1 text-[10px] uppercase">Select City</label>
+                        <select id="city" class="input-field !bg-white/50">
+                            <option value="tokyo" selected>Tokyo (東京)</option>
+                            <option value="osaka">Osaka (大阪)</option>
+                            <option value="kyoto">Kyoto (京都)</option>
+                            <option value="sapporo">Sapporo (札幌)</option>
+                            <option value="fukuoka">Fukuoka (福岡)</option>
+                            <option value="hcmc">Ho Chi Minh (参考)</option>
+                        </select>
+                    </div>
+                    <button id="checkButton" class="check-btn px-8 py-2 text-white font-bold rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 h-[46px]">
+                        チェック
+                    </button>
+                </div>
+
+                <div class="info-card bg-white/20 p-4 rounded-2xl backdrop-blur-sm order-1">
+                    <div class="grid grid-cols-3 gap-2 text-sm text-center">
+                        <div><span class="text-[10px] opacity-60 uppercase font-bold">Location</span><br><strong id="weatherLocation" class="text-lg">Tokyo</strong></div>
+                        <div><span class="text-[10px] opacity-60 uppercase font-bold">Temp</span><br><strong id="weatherTemperature" class="text-lg">--°C</strong></div>
+                        <div><span class="text-[10px] opacity-60 uppercase font-bold">Condition</span><br><strong id="weatherCondition" class="text-lg">--</strong></div>
+                    </div>
+                </div>
+
+                <div class="recommend-box flex flex-col bg-white/40 p-5 rounded-2xl border border-white/50 shadow-inner min-h-[150px] order-2">
+                    <h2 class="text-lg font-bold mb-2 themed-text border-b border-pink-200/50 pb-1">✨ 服装のおすすめ</h2>
+                    <div id="recommendationText" class="text-gray-800 leading-relaxed whitespace-pre-line overflow-y-auto flex-grow italic">
+                        都市を選択して「チェック」を押してください。
+                    </div>
+                </div>
+            </div>
+<div class="lg:w-[35%] flex items-center justify-center p-4"> 
+    
+    <div class="thought-bubble bg-white p-3 rounded-[100%] shadow-2xl flex flex-col border-[2px] border-white/80 relative w-full max-w-[380px]">
+        
+        <h2 class="text-center font-bold themed-text mb-2 text-sm tracking-widest uppercase">天気view</h2>
+        
+        <div id="canvasContainer" class="rounded-[100%] overflow-hidden relative bg-gradient-to-b from-transparent to-black/5 aspect-[3/4] w-full">
+            <div id="weatherOverlay" class="pointer-events-none absolute inset-0 z-20 overflow-hidden"></div>
+            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-30 hidden font-bold themed-text animate-pulse">
+                Loading...
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="logic.js"></script>
+    <script src="modelConfig.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

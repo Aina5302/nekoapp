@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap');
+
+:root {
+    
+    transition: all 0.3s ease;
+
+
+.main-card {
+    background-color: var(--app-bg-color);
+    color: var(--app-text-color);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+    --app-bg-color: #fcd5d7; /* Mặc định hồng */
+    --app-text-color: #b54a55;
+}
+
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background-color: #b4d8ec;
+    transition: background-color 0.5s ease;
+}
+
+.main-card {
+    background-color: var(--app-bg-color);
+    border: 6px solid white;
+    transition: background-color 0.5s ease;
+}
+
+.themed-text {
+    color: var(--app-text-color);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.check-btn {
+    background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 100%);
+}
+
+.check-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+#canvasContainer {
+    background: radial-gradient(circle, #ffffff 100%, #fff5f5 100%);
+    position: relative; 
+    overflow: hidden;
+}
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  50% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.btn-start:hover {
+    animation: shake 0.5s infinite; /* Nút sẽ rung tiếng mèo! */
+}
+@keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
+}
+.animate-fall {
+    position: absolute;
+    top: -20px;
+    animation: fall linear infinite;
+}
+#canvasContainer {
+    position: relative; 
+    background: radial-gradient(circle, #ffffff 0%, #fff5f5 100%);
+    overflow: hidden; /* Không cho tuyết rơi tràn ra ngoài khung */
+}
+
+/* Lớp chứa tuyết phải nằm trên cùng */
+#weatherOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Để bạn vẫn click/xoay được mèo 3D */
+    z-index: 50; /* Con số may mắn để hiện lên trên canvas */
+}
+/* Hiệu ứng lá bay chéo */
+@keyframes leaf-fly {
+    0% {transform: translate(-10%, -10%) rotate(0deg);opacity: 0;}
+    10% {opacity: 1;}
+    90% {opacity: 1;}
+    100% {transform: translate(110vw, 110vh) rotate(720deg);opacity: 0;}
+}
+
+.animate-leaf {
+    position: absolute;
+    pointer-events: none;
+    z-index: 100;
+    animation: leaf-fly linear infinite;
+    display: inline-block;
+}
+
+/* mat troi */
+@keyframes sun-glow {
+    0% { transform: scale(1); opacity: 0.8; filter: blur(5px); }
+    50% { transform: scale(1.2); opacity: 1; filter: blur(10px); }
+    100% { transform: scale(1); opacity: 0.8; filter: blur(5px); }
+}
+.sun-element {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #ffcc00 0%, #ff6600 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 30px #ffcc00;
+    animation: sun-glow 3s ease-in-out infinite;
+    z-index: 15;
+}
+/* may*/
+@keyframes cloud-drift {
+    0% { transform: translateX(-100px); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(400px); opacity: 0; }
+}
+
+.animate-cloud {
+    position: absolute;
+    animation: cloud-drift linear infinite;
+    filter: blur(1px); /* Làm mây hơi mờ cho giống thật */
+}
+/* mua*/
+.rain-streak {
+    position: absolute;
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(114, 154, 228, 0.8) 100%);
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 100;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-50px); opacity: 0; } /* Bắt đầu từ phía trên màn hình */
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(450px); opacity: 0; } /* Rơi xuống dưới */
+}
+.animate-fall {
+    animation: fall 3s linear infinite;
+}
+.animate-rain {
+    animation: fall 0.5s linear infinite; 
+}
+/* thunder */
+.lightning-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white; 
+    opacity: 0;
+    z-index: 999; 
+    pointer-events: none;
+}
+
+.animate-lightning {
+    animation: lightning-strike-classic 0.3s ease-out;
+}
+
+@keyframes lightning-strike-classic {
+    0% { opacity: 0; }
+    10% { opacity: 0.8; }
+    20% { opacity: 0.2; }
+    30% { opacity: 0.9; }
+    100% { opacity: 0; }
+}
+/* css select */
+.input-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* */
+.input-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--app-text-color);
+    margin-bottom: 5px;
+    opacity: 0.8;
+}
+
+/* */
+.input-field {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 12px; /* Bo tròn cho mềm mại */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.6); /* Trong suốt nhẹ */
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ xịn xò */
+    color: var(--app-text-color);
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    
+    /* xoa icon */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* dichuot */
+.input-field:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+.input-field:focus {
+    border-color: var(--app-text-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+/* Đảm bảo khung chính không bị bóp nghẹt */
+.thought-bubble {
+    min-width: 250px; /* Đảm bảo khung không quá bé */
+    z-index: 10;
+}
+
+/* Viên bi lớn */
+.thought-bubble::after {
+    content: "";
+    position: absolute;
+    background-color: white;
+    top: 50%;
+    right: -20px; /* Chỉnh lại khoảng cách */
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 4px 0 8px rgba(0,0,0,0.05); /* Đổ bóng nhẹ sang phải */
+    pointer-events: none; /* Không cản trở click chuột */
+}
+
+/* Viên bi nhỏ */
+.thought-bubble::before {
+    content: "";
+    position: absolute;
+    background-color: white;
+    top: 50%;
+    right: -45px; /* Đẩy xa hơn sang phía recommend box */
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    opacity: 0.6;
+    pointer-events: none;
+}
