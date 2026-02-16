@@ -75,7 +75,7 @@ function generateRecommendation(weather, preferences) {
     // --- TRƯỜNG HỢP ĐẶC BIỆT: MƯA/TUYẾT/NẮNG (Hỗ trợ cả Kanji và Romaji) ---
     const cond = condition.toLowerCase();
     if (cond.includes('雨') || cond.includes('rain')) {
-        recommendations.push("☔ Rain: レインブーツ推奨。生足なら濡れてもすぐ拭けるよ！");
+        recommendations.push("☔ Rain: 傘とレインブーツ推奨忘れず。生足なら濡れてもすぐ拭けるよ！");
     } else if (cond.includes('雪') || cond.includes('snow')) {
         recommendations.push("❄️ Snow: 滑り止め靴 ＋ 防水スプレーを靴に吹きかけて！");
     } else if (cond.includes('晴') || cond.includes('clear')) {
