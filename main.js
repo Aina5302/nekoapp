@@ -114,8 +114,8 @@ async function handleCheck() {
         document.getElementById('recommendationText').innerText = advice;
 
     } catch (e) {
-        console.error("Lỗi xử lý:", e);
-        alert("Có lỗi xảy ra rồi sếp ơi! Check console xem sao.");
+        console.error("erro:", e);
+        alert("erro");
     }
 }
 
